@@ -1,0 +1,50 @@
+Sub Mapping()
+
+    Dim BourassaCol As Variant, TemplateCol As Variant
+    Dim MappingTable As Variant
+    Dim end1 As Integer, end2 As Integer
+    
+    'BourssaCol is the name of the name of the inital state (initial headings)
+    'TemplateCol is the name of the headers i need
+    'Unfortunately changing the 2 dimensional array to a 1 dimensional array of headers is tedious and
+        'requires looping through the array so I wrote around that issue
+    
+Application.ScreenUpdating = False
+Sheet8.Visible = True
+        
+        Sheet8.Select
+        MappingTable = Range("A2", Range("B2").End(xlDown))
+        Sheet9.Select
+        end1 = Range("A1").End(xlToRight).Column
+        BourassaCol = Range("A1", Range("A1").End(xlToRight))
+        Sheet1.Select
+        end2 = Range("A1").End(xlToRight).Column
+        TemplateCol = Range("A1", Range("A1").End(xlToRight))
+        
+            For i = 1 To end1
+            
+                For n = LBound(MappingTable, 1) To UBound(MappingTable, 1)
+                    If BourassaCol(1, i) = MappingTable(n, 1) Then
+                        
+                        For x = 1 To end2
+                          If MappingTable(n, 2) = TemplateCol(1, x) Then
+                          
+                            Sheet9.Select
+                                Range(Cells(2, i), Cells(2, i).End(xlDown)).Copy
+                            Sheet1.Select
+                                Range(Cells(2, x), Cells(2, x).End(xlDown)).PasteSpecial xlPasteValues
+                                
+                            Exit For
+                           End If
+                         Next x
+                         
+                    Exit For
+                    End If
+                Next n
+                
+            Next i
+            
+Sheet8.Visible = False
+Application.ScreenUpdating = True
+
+End Sub
